@@ -4,33 +4,40 @@
 import socket
 import threading
 
-def answer(interval):
+def answer(sock):
 	while True:
 		dataout = sock.recv(1024)
 		if dataout:
-			print('2: ' + dataout.decode("utf-8"))
+			print('\n2: ' + dataout.decode("utf-8"))
+		if dataout == 'q' or dataout == 'end':
+			sock.close()
+			thread_answer.end()
+			thread_request.end()
+			input('Press any button...')
+			return
 	
-def request(interval):
+def request(sock):
 	while True:
 		datain = input('1: ')
-		if datain == 'q' or datain == 'end':
-			return
 		sock.send(datain.encode("utf-8"))
+		if datain == 'q' or datain == 'end':
+			sock.close()
+			thread_answer.end()
+			thread_request.end()
+			input('Press any button...')
+			return
 
 
 
-		
-sock = socket.socket()
-sock.connect(('localhost', 6668))
-#data = ' '
-print ('Start')
+def main():		
+	sock = socket.socket()
+	sock.connect(('localhost', 6668))
+	print ('Start')
 
-ta = threading.Thread(target=answer, args=(1,))
-tr = threading.Thread(target=request, args=(1,))
+	thread_answer = threading.Thread(target=answer, args=(sock,))
+	thread_request = threading.Thread(target=request, args=(sock,))
 
-ta.start()
-tr.start()
+	thread_answer.start()
+	thread_request.start()
 
-sock.close()
-
-input('Press any button...')
+main()
