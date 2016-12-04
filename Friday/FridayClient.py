@@ -2,23 +2,26 @@
 import http.client as httplib
 from parsing import *
 
-def printText(txt):
-    lines = txt.decode('utf-8').split('\n')
-    for line in lines:
-        print (line.strip())
+class HTTPServer():
+	httpServ = 0
+	def __init__(self):
+		
+		self.httpServ = httplib.HTTPConnection('f0046207.ngrok.io')
+		self.httpServ.connect()
+	
 
-			
-server = 'f0046207.ngrok.io'	
-httpServ = httplib.HTTPConnection(server)
-httpServ.connect()
+# request = input('input your request: \n')
+# request = 'user:' + request
+# print (request)
 
-request = input('input your request: \n')
-request = 'user:' + request
-print (request)
-httpServ.request('POST', '/index', request.encode('utf-8'))
+	def sendrequest(self, ):
+		request = "user:blablabla"
+		self.httpServ.request('POST', '/index', (request).encode('utf-8'))
+		self.getresponse()
 
-response = httpServ.getresponse()
-if response.status == httplib.OK:
-    ParseAnswer(response.read())
-
-httpServ.close()
+	def getresponse(self, ):	
+		response = self.httpServ.getresponse()
+		if response.status == httplib.OK:
+			ParseAnswer(response.read())
+	def close(self, ):
+		self.httpServ.close()	
