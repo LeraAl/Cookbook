@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import http.client as httplib
+from parsing import *
 
 def printText(txt):
     lines = txt.decode('utf-8').split('\n')
     for line in lines:
         print (line.strip())
 
-		
-server = input('Input the server:\n')	
-server = server + '.ngrok.io'	
+			
+server = 'f0046207.ngrok.io'	
 httpServ = httplib.HTTPConnection(server)
 httpServ.connect()
 
@@ -19,6 +19,6 @@ httpServ.request('POST', '/index', request.encode('utf-8'))
 
 response = httpServ.getresponse()
 if response.status == httplib.OK:
-    printText (response.read())
+    ParseAnswer(response.read())
 
 httpServ.close()
