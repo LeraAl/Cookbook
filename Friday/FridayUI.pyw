@@ -9,14 +9,10 @@ class MainWindow(QtGui.QMainWindow):
 	def __init__(self, httpServ, parent=None):
 		super(MainWindow, self).__init__(parent)
 
-		roomLabel = QtGui.QLabel('room')
 		
 		self.browser = QtGui.QListWidget()
-		#self.browser.backwardAvailable
-
-		self.textEdit = QtGui.QTextEdit()
+		self.textEdit = QtGui.QLineEdit()
 		self.textEdit.setMaximumSize(QtCore.QSize(400,60))
-		#4 edit line
 		self.connect(self.browser, QtCore.SIGNAL("returnPressed()"), self.sendrequest)
 
 		SendButton = QtGui.QPushButton('Send')
@@ -25,7 +21,7 @@ class MainWindow(QtGui.QMainWindow):
 		
 		ExitButton = QtGui.QPushButton('Exit')
 		ExitButton.setMaximumSize(QtCore.QSize(400,60))
-		#ExitButton.clicked.connect(httpServ.close)
+		ExitButton.clicked.connect(httpServ.close)
 		self.connect(ExitButton, QtCore.SIGNAL('clicked()'), self.close)
 		
 		layoutINlayout = QtGui.QHBoxLayout()
@@ -48,7 +44,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.setWindowFlags(QtCore.Qt.WindowTitleHint )
 		
 	def sendrequest(self, ):
-		txt = self.textEdit.toPlainText()
+		txt = self.textEdit.text()
 		if txt != '':
 			item = QtGui.QListWidgetItem(txt)
 			item.setTextAlignment(2)
@@ -60,6 +56,9 @@ class MainWindow(QtGui.QMainWindow):
 		item.setTextAlignment(1)
 		self.browser.addItem(item)
 	
+	def CloseEvent(self, event):
+		httpServ.close()
+		self.windowClose.emit()
 try:
 	httpServ = FridayClient.HTTPServer()
 	
