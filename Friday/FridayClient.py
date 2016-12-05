@@ -5,23 +5,24 @@ from parsing import *
 class HTTPServer():
 	httpServ = 0
 	def __init__(self):
-		
-		self.httpServ = httplib.HTTPConnection('f0046207.ngrok.io')
-		self.httpServ.connect()
-	
+		try:
+			self.httpServ = httplib.HTTPConnection('f0046207.ngrok.io')
+			self.httpServ.connect()
+		except:
+			httpServ = 0;
 
-# request = input('input your request: \n')
-# request = 'user:' + request
-# print (request)
-
-	def sendrequest(self, ):
-		request = "user:blablabla"
-		self.httpServ.request('POST', '/index', (request).encode('utf-8'))
-		self.getresponse()
-
-	def getresponse(self, ):	
+	def sendrequest(self, txt, ui):
+		request = "user:" + txt
+		try:
+			self.httpServ.request('POST', '/index', request.encode('utf-8'))
+			self.getresponse(ui)
+		except:
+			ui.outputresponse("Can't connect the server")
+			
+	def getresponse(self, ui):	
 		response = self.httpServ.getresponse()
 		if response.status == httplib.OK:
-			ParseAnswer(response.read())
+			ParseAnswer(response.read(), ui)
+			
 	def close(self, ):
 		self.httpServ.close()	
