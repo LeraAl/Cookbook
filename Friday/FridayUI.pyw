@@ -18,21 +18,17 @@ class MainWindow(QtGui.QMainWindow):
 		self.browser = QtGui.QListWidget()
 		self.textEdit = QtGui.QLineEdit()
 		self.textEdit.setMaximumHeight(60)
-		self.connect( self.browser, QtCore.SIGNAL("returnPressed()"), self.sendrequest )
+		self.textEdit.setPlaceholderText('Text input...')
+		
 
 		SendButton = QtGui.QPushButton('Send')
 		SendButton.setMaximumSize( QtCore.QSize(400,60) )
 		SendButton.clicked.connect( self.sendrequest )
 		
-		ExitButton = QtGui.QPushButton('Exit')
-		ExitButton.setMaximumSize( QtCore.QSize(400,60) )
-		ExitButton.clicked.connect( httpServ.close )
-		self.connect( ExitButton, QtCore.SIGNAL('clicked()'), self.close )
 		
 		layoutINlayout = QtGui.QHBoxLayout()
 		layoutINlayout.addWidget( self.textEdit )  
 		layoutINlayout.addWidget( SendButton )
-		layoutINlayout.addWidget( ExitButton )
 
 
 		widget = QtGui.QWidget()
@@ -46,15 +42,14 @@ class MainWindow(QtGui.QMainWindow):
 		mainwindow.addLayout ( layoutINlayout )
 
 		widget.setLayout( mainwindow )
-		#self.setWindowFlags( QtCore.Qt.WindowTitleHint )
 		
 	def sendrequest(self, ):
 		txt = self.textEdit.text()
 		if txt != '':
 			requesttext = QtGui.QListWidgetItem(txt)
-			#requesttext.setBackgroundColor(QtGui.QColor(200, 3, 32, 20))
 			requesttext.setTextAlignment(2)
 			self.browser.addItem(requesttext)
+			self.browser.scrollToBottom()
 			httpServ.sendrequest(txt, self)
 
 	def outputresponse(self, txt):
@@ -62,6 +57,7 @@ class MainWindow(QtGui.QMainWindow):
 		responsetext.setBackgroundColor(QtGui.QColor(32, 32, 32, 20))
 		responsetext.setTextAlignment(1)
 		self.browser.addItem(responsetext)
+		self.browser.scrollToBottom()
 	
 	def CloseEvent(self, event):
 		httpServ.close()
