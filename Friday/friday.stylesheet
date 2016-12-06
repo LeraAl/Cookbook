@@ -1,0 +1,40 @@
+QPushButton
+{
+	height: 20px;
+	width: 50px;
+	border-radius: 2px;
+	background-color: rgb(160, 160, 160);
+	color: black;
+	font: bold;
+}
+
+QLineEdit
+{
+	border: 2px solid grey;
+	border-radius: 5px;
+}
+
+QListWidget 
+{
+	border: 2px solid grey;
+	border-radius: 5px;
+	background-color: white;
+	font-size: 20px;
+}
+
+QListWidgetItem#responsetext
+{
+	background-color: rgbt(32, 32, 32, 50);	
+}
+
+QListWidgetItem#responsetext
+{
+	background-color: rgbt(250, 0, 0, 50);	
+}
+
+QListWidget::item:selected
+{
+	border: none;
+	background-color: rgbt(90, 190, 135, 100);	
+	color: black;
+}

@@ -8,53 +8,60 @@ class MainWindow(QtGui.QMainWindow):
 	flag = True
 	def __init__(self, httpServ, parent=None):
 		super(MainWindow, self).__init__(parent)
-
+		self.setWindowTitle('Friday')
+		self.styleData = ''
+		f = open('friday.stylesheet' , 'r')
+		self.styleData = f.read()
+		f.close()
+		self.setStyleSheet( self.styleData )
 		
 		self.browser = QtGui.QListWidget()
 		self.textEdit = QtGui.QLineEdit()
-		self.textEdit.setMaximumSize(QtCore.QSize(400,60))
-		self.connect(self.browser, QtCore.SIGNAL("returnPressed()"), self.sendrequest)
+		self.textEdit.setMaximumHeight(60)
+		self.connect( self.browser, QtCore.SIGNAL("returnPressed()"), self.sendrequest )
 
 		SendButton = QtGui.QPushButton('Send')
-		SendButton.setMaximumSize(QtCore.QSize(400,60))
-		SendButton.clicked.connect(self.sendrequest)
+		SendButton.setMaximumSize( QtCore.QSize(400,60) )
+		SendButton.clicked.connect( self.sendrequest )
 		
 		ExitButton = QtGui.QPushButton('Exit')
-		ExitButton.setMaximumSize(QtCore.QSize(400,60))
-		ExitButton.clicked.connect(httpServ.close)
-		self.connect(ExitButton, QtCore.SIGNAL('clicked()'), self.close)
+		ExitButton.setMaximumSize( QtCore.QSize(400,60) )
+		ExitButton.clicked.connect( httpServ.close )
+		self.connect( ExitButton, QtCore.SIGNAL('clicked()'), self.close )
 		
 		layoutINlayout = QtGui.QHBoxLayout()
-		layoutINlayout.addWidget(self.textEdit)
-		layoutINlayout.addWidget(SendButton)
-		layoutINlayout.addWidget(ExitButton)
+		layoutINlayout.addWidget( self.textEdit )  
+		layoutINlayout.addWidget( SendButton )
+		layoutINlayout.addWidget( ExitButton )
 
 
 		widget = QtGui.QWidget()
-		self.setCentralWidget(widget)
+		self.setCentralWidget( widget )
 
 		self.layout = QtGui.QVBoxLayout()
-		self.layout.addWidget(self.browser)
+		self.layout.addWidget( self.browser )
 
 		mainwindow = QtGui.QVBoxLayout()
-		mainwindow.addLayout (self.layout )
-		mainwindow.addLayout (layoutINlayout )
+		mainwindow.addLayout ( self.layout )
+		mainwindow.addLayout ( layoutINlayout )
 
-		widget.setLayout(mainwindow)
-		self.setWindowFlags(QtCore.Qt.WindowTitleHint )
+		widget.setLayout( mainwindow )
+		#self.setWindowFlags( QtCore.Qt.WindowTitleHint )
 		
 	def sendrequest(self, ):
 		txt = self.textEdit.text()
 		if txt != '':
-			item = QtGui.QListWidgetItem(txt)
-			item.setTextAlignment(2)
-			self.browser.addItem(item)
+			requesttext = QtGui.QListWidgetItem(txt)
+			#requesttext.setBackgroundColor(QtGui.QColor(200, 3, 32, 20))
+			requesttext.setTextAlignment(2)
+			self.browser.addItem(requesttext)
 			httpServ.sendrequest(txt, self)
 
 	def outputresponse(self, txt):
-		item = QtGui.QListWidgetItem(txt)
-		item.setTextAlignment(1)
-		self.browser.addItem(item)
+		responsetext = QtGui.QListWidgetItem(txt)
+		responsetext.setBackgroundColor(QtGui.QColor(32, 32, 32, 20))
+		responsetext.setTextAlignment(1)
+		self.browser.addItem(responsetext)
 	
 	def CloseEvent(self, event):
 		httpServ.close()
@@ -67,7 +74,6 @@ except:
 app = QtGui.QApplication(sys.argv)
 widget = MainWindow(httpServ)
 widget.resize(250, 150)
-widget.setWindowTitle('Qt App')
 widget.show()
 
 sys.exit(app.exec_())
