@@ -16,9 +16,15 @@ class MainWindow(QtGui.QMainWindow):
 		self.setStyleSheet( self.styleData )
 		
 		self.browser = QtGui.QListWidget()
+		self.browser.setWordWrap( True )
+		#self.browser.setWrapping( True )
+		#self.browser.setFlow( QtGui.QListView.LeftToRight )
+		#self.browser.setResizeMode(QtGui.QListView.Adjust)
+		#self.browser.setViewMode(QtGui.QListView.ListMode)
 		self.textEdit = QtGui.QLineEdit()
 		self.textEdit.setMaximumHeight(60)
 		self.textEdit.setPlaceholderText('Text input...')
+		self.connect(self.textEdit, QtCore.SIGNAL('editingFinished()'), self.sendrequest)
 		
 
 		SendButton = QtGui.QPushButton('Send')
@@ -42,23 +48,34 @@ class MainWindow(QtGui.QMainWindow):
 		mainwindow.addLayout ( layoutINlayout )
 
 		widget.setLayout( mainwindow )
-		
+	
+	#отправка ответа на сервер
 	def sendrequest(self, ):
 		txt = self.textEdit.text()
 		if txt != '':
-			requesttext = QtGui.QListWidgetItem(txt)
+			requesttext = QtGui.QListWidgetItem(txt.strip())
 			requesttext.setTextAlignment(2)
+			requesttext.width = self.browser.gridSize().width()
 			self.browser.addItem(requesttext)
 			self.browser.scrollToBottom()
+			self.textEdit.clear()
 			httpServ.sendrequest(txt, self)
 
+	#вывод ответа		
 	def outputresponse(self, txt):
 		responsetext = QtGui.QListWidgetItem(txt)
 		responsetext.setBackgroundColor(QtGui.QColor(32, 32, 32, 20))
 		responsetext.setTextAlignment(1)
+		responsetext.width = self.browser.gridSize().width()
 		self.browser.addItem(responsetext)
 		self.browser.scrollToBottom()
 	
+	#изменение размеров сообщений в чате при изменении размеров окна
+	def ResizeEvent(self, event):
+		for i in range(self.browser.count):
+			itemAt(i).width = self.browser.gridSize().width
+	
+	#перехват закрытия окна и завершение  сеанса
 	def CloseEvent(self, event):
 		httpServ.close()
 		self.windowClose.emit()

@@ -12,7 +12,7 @@ class HTTPServer():
 			httpServ = 0;
 
 	def sendrequest(self, txt, ui):
-		request = "user:" + txt
+		request = "device:python_client***user:" + txt
 		try:
 			self.httpServ.request('POST', '/index', request.encode('utf-8'))
 			self.getresponse(ui)
