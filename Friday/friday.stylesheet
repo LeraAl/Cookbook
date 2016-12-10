@@ -1,35 +1,34 @@
 QPushButton
 {
-	height: 20px;
+	height: 25px;
 	width: 50px;
 	border-radius: 2px;
 	background-color: rgb(160, 160, 160);
 	color: black;
-	font: bold;
+	font-size: 14px;
+	font-style: bold;
 }
 
 QLineEdit
 {
 	border: 2px solid grey;
 	border-radius: 5px;
+	font-size: 14px; 
+	font-style: bold;
 }
 
 QListWidget 
 {
+	
 	border: 2px solid grey;
 	border-radius: 5px;
 	background-color: white;
-	font-size: 20px;
-}
-
-QListWidgetItem#responsetext
-{
-	background-color: rgbt(32, 32, 32, 50);	
-}
-
-QListWidgetItem#responsetext
-{
-	background-color: rgbt(250, 0, 0, 50);	
+	font-size: 16px;
+	Text
+	{
+		width: self.width;
+		wrapMode: Text.WordWrap;
+	}
 }
 
 QListWidget::item:selected

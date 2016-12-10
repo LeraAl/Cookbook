@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+# -*- coding: cp1251 -*-
+
 import http.client as httplib
 from parsing import *
 
@@ -23,6 +25,6 @@ class HTTPServer():
 		response = self.httpServ.getresponse()
 		if response.status == httplib.OK:
 			ParseAnswer(response.read(), ui)
-			
+				
 	def close(self, ):
 		self.httpServ.close()	
